@@ -15,14 +15,27 @@ import os
 import random
 import cv2
 
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # Currently, memory growth needs to be the same across GPUs
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+    except RuntimeError as e:
+        # Memory growth must be set before GPUs have been initialized
+        print(e)
 
 def load_images(directory):
     images = []
     labels = []
+    outputs = 0
     uniq_labels = sorted(os.listdir(directory))
 
     for idx, label in enumerate(uniq_labels):
         print(label, " is ready to load")
+        outputs = outputs + 1
         for file in os.listdir(directory + "/" + label):
             filepath = directory + "/" + label + "/" + file
             image = cv2.resize(cv2.imread(filepath), (96, 96))
@@ -36,10 +49,10 @@ def load_images(directory):
     print(images.shape)
     images = images.astype('float32')/255
     labels = keras.utils.to_categorical(labels)
-    return(images, labels)
+    return(images, labels, outputs)
 
 
-images, labels = load_images(directory="./data")
+images, labels, noutputs = load_images(directory="./data")
 print("Data has been loaded")
 
 print(labels[1])
@@ -66,7 +79,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(6, activation='softmax')
+    tf.keras.layers.Dense(noutputs, activation='softmax')
 ])
 
 model.compile(loss='categorical_crossentropy',
@@ -77,7 +90,7 @@ history = model.fit(images, labels,
                     verbose=1)
 
 # saving the model
-model.save("test_model.h5")
+model.save("test_model1.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()
