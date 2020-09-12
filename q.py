@@ -26,9 +26,9 @@ while True:
 
     roi = frame[0:250, 0:250]
     cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2)
-
-    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(roi, (7, 7), 0)
+    gray = roi
+    # gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+    # gray = cv2.GaussianBlur(roi, (7, 7), 0)
 
     gray = cv2.resize(gray, (96, 96))
 
@@ -38,7 +38,7 @@ while True:
 
     cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 
-    cv2.imshow('frame', frame)
+    cv2.imshow('frame', gray)
 
     keypress = cv2.waitKey(1)
 

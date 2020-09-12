@@ -52,7 +52,7 @@ def load_images(directory):
     return(images, labels, outputs)
 
 
-images, labels, noutputs = load_images(directory="./data")
+images, labels, noutputs = load_images(directory="./data1")
 print("Data has been loaded")
 
 print(labels[1])
@@ -86,7 +86,7 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'], optimizer='adam')
 
 history = model.fit(images, labels,
-                    batch_size=64, epochs=5,
+                    batch_size=128, epochs=20,
                     verbose=1)
 
 # saving the model
