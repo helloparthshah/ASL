@@ -24,22 +24,21 @@ while True:
     (t, frame) = camera.read()
     frame = cv2.flip(frame, 1)
 
-    roi = frame[0:320, 0:180]
-    cv2.rectangle(frame, (0, 0), (180, 320), (0, 255, 0), 2)
-    # 720 1280
+    roi = frame[0:250, 0:250]
+    cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2)
+
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (7, 7), 0)
+    gray = cv2.GaussianBlur(roi, (7, 7), 0)
 
-    gray = cv2.resize(gray, (720, 1280))
-    gray = cv2.rotate(gray,cv2.ROTATE_90_CLOCKWISE)
+    gray = cv2.resize(gray, (96, 96))
 
-    # res = model.predict_classes(gray.reshape(1, 96, 96, 3))
+    res = model.predict_classes(gray.reshape(1, 96, 96, 3))
 
-    # print(chr(res[0]+65))
+    print(chr(res[0]+65))
 
     cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 
-    cv2.imshow('frame', gray)
+    cv2.imshow('frame', frame)
 
     keypress = cv2.waitKey(1)
 
