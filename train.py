@@ -27,6 +27,13 @@ if gpus:
         # Memory growth must be set before GPUs have been initialized
         print(e)
 
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
+
+
 def load_images(directory):
     images = []
     labels = []
@@ -45,6 +52,8 @@ def load_images(directory):
     images = np.array(images)
     labels = np.array(labels)
 
+    images, labels = unison_shuffled_copies(images, labels)
+
     # images = images.reshape((len(images), 96, 96, 1))
     print(images.shape)
     images = images.astype('float32')/255
@@ -55,7 +64,6 @@ def load_images(directory):
 images, labels, noutputs = load_images(directory="./data1")
 print("Data has been loaded")
 
-print(labels[1])
 """ c = list(zip(images, labels))
 
 random.shuffle(c)
@@ -66,10 +74,10 @@ x_train = images[0:500]
 y_train = labels[0:500]
 x_test = images[500:]
 y_test = labels[500:] """
-# sample = images[600]
-# print(sample.shape)
-# plt.imshow(sample)
-# plt.show()
+sample = images[1]
+print(sample.shape, labels[1])
+plt.imshow(sample)
+plt.show()
 
 model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), input_shape=(
@@ -86,11 +94,11 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'], optimizer='adam')
 
 history = model.fit(images, labels,
-                    batch_size=128, epochs=20,
+                    batch_size=64, epochs=5,
                     verbose=1)
 
 # saving the model
-model.save("test_model1.h5")
+model.save("model.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()
