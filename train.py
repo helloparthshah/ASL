@@ -25,7 +25,7 @@ def load_images(directory):
         print(label, " is ready to load")
         for file in os.listdir(directory + "/" + label):
             filepath = directory + "/" + label + "/" + file
-            image = cv2.resize(cv2.imread(filepath), (96, 96))
+            image = cv2.resize(cv2.imread(filepath), (720, 1280))
             # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             images.append(image)
             labels.append(idx)
@@ -39,7 +39,7 @@ def load_images(directory):
     return(images, labels)
 
 
-images, labels = load_images(directory="./data")
+images, labels = load_images(directory="./data1")
 print("Data has been loaded")
 
 print(labels[1])
@@ -60,13 +60,13 @@ y_test = labels[500:] """
 
 model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), input_shape=(
-        96, 96, 3), activation='relu'),
+        720, 1280, 3), activation='relu'),
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(6, activation='softmax')
+    tf.keras.layers.Dense(3, activation='softmax')
 ])
 
 model.compile(loss='categorical_crossentropy',
@@ -77,7 +77,7 @@ history = model.fit(images, labels,
                     verbose=1)
 
 # saving the model
-model.save("test_model.h5")
+model.save("1.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()

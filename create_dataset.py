@@ -4,7 +4,7 @@ import os
 
 d = input('Alphabet: ')
 
-dir0 = 'data/'+d
+dir0 = 'data1/'+d
 print(dir0)
 
 try:
@@ -19,18 +19,22 @@ while True:
     (t, frame) = camera.read()
     frame = cv2.flip(frame, 1)
 
-    roi = frame[0:250, 0:250]
-    cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2)
+    ''' roi = frame[0:250, 0:250]
+    cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2) '''
+
+    roi = frame[0:320, 0:180]
+    cv2.rectangle(frame, (0, 0), (180, 320), (0, 255, 0), 2)
 
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (7, 7), 0)
 
-    gray = cv2.resize(gray, (96, 96))
-    print(gray.shape)
+    gray = cv2.resize(gray, (720, 1280))
+    
+    # print(gray.shape)
 
     cv2.imwrite(dir0+'/' + str(i)+'.jpg', gray)
     i += 1
-    print("dir0"+'/' + str(i)+'.jpg')
+    print(dir0+'/' + str(i)+'.jpg')
 
     if i > 500:
         break
