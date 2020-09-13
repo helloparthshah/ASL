@@ -15,6 +15,7 @@
             cursor: pointer;
             padding: 14px 16px;
             margin: 20px;
+            width: 150px;
             border-radius: 10px;
             transition: 0.3s;
             font-size: 17px;
@@ -118,11 +119,18 @@
         </p>
     </div>
     <div id="Video" class="tabcontent" style="text-align:center">
-        <h1>Video Streaming Demonstration </h1>
+        <!-- <h1>Video Streaming Demonstration </h1> -->
         <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
         <div style="padding-top: 30px; display: flex; flex-direction: column; align-items: center;">
             <textarea style="width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter'></textarea>
-            <button class="open-button" onclick="test()">Autocorrect</button>
+            <div>
+                <button class="open-button" onclick="test()">Autocorrect</button>
+                <button class="open-button" onclick="clr()">Clear</button>
+            </div>
+            <div>
+                <button class="open-button" onclick="play()">Play</button>
+                <button class="open-button" onclick="pause()">Pause</button>
+            </div>
         </div>
     </div>
     <div id="Team" class="tabcontent">
@@ -165,19 +173,31 @@
     </div>
     <script>
         var letter = document.getElementById("letter");
+        var flag = false
 
         setInterval(() => {
             fetch("/letter")
                 .then(response => {
                     response.text().then(t => {
-                        if (t == 'Space') {
-                            t = ' '
-                            test();
+                        if (flag == true) {
+
+                            if (t == 'Space') {
+                                t = ' '
+                                test();
+                            }
+                            letter.innerHTML += t
                         }
-                        letter.innerHTML += t
                     })
                 });
         }, 5000);
+
+        function play() {
+            flag = true
+        }
+
+        function pause() {
+            flag = false
+        }
     </script>
     <script>
         openTab(event, 'Video');
@@ -196,6 +216,10 @@
             // evt.currentTarget.className += " active ";
             document.getElementById(cityName).className += ' active '
                 // console.log(document.getElementById(cityName))
+        }
+
+        function clr() {
+            document.getElementById('letter').innerHTML = '';
         }
 
         function test() {
