@@ -54,4 +54,4 @@ class VideoCamera(object):
                     1, (225, 0, 0), 2, cv2.LINE_AA)
 
         ret, jpeg = cv2.imencode('.jpg', frame)
-        return jpeg.tobytes()
+        return jpeg.tobytes(), chr(char)
