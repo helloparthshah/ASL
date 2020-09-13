@@ -121,7 +121,7 @@ model.compile(optimizer='rmsprop',
 
 hist = model.fit(images, labels, epochs=5, batch_size=64)
 # saving the model
-model.save("model1.h5")
+model.save("model.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()

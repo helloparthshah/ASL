@@ -161,7 +161,7 @@
         }, 5000);
     </script>
     <script>
-        openTab(event, 'About');
+        openTab(event, 'Video');
 
         function openTab(evt, cityName) {
             var i, tabcontent, tablinks;
@@ -174,7 +174,9 @@
                 tablinks[i].className = tablinks[i].className.replace(" active ", " ");
             }
             document.getElementById(cityName).style.display = "block ";
-            evt.currentTarget.className += " active ";
+            // evt.currentTarget.className += " active ";
+            document.getElementById(cityName).className += ' active '
+            console.log(document.getElementById(cityName))
         }
 
         function test() {
