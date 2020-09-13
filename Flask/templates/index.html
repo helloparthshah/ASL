@@ -155,6 +155,10 @@
             fetch("/letter")
                 .then(response => {
                     response.text().then(t => {
+                        if (t == 'Space') {
+                            t = ' '
+                            test();
+                        }
                         letter.innerHTML += t
                     })
                 });
