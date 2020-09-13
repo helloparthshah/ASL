@@ -52,7 +52,7 @@ def load_images(directory):
     images = np.array(images)
     labels = np.array(labels)
 
-    images, labels = unison_shuffled_copies(images, labels)
+    # images, labels = unison_shuffled_copies(images, labels)
 
     # images = images.reshape((len(images), 96, 96, 1))
     print(images.shape)
@@ -74,12 +74,12 @@ x_train = images[0:500]
 y_train = labels[0:500]
 x_test = images[500:]
 y_test = labels[500:] """
-sample = images[1]
+""" sample = images[1]
 print(sample.shape, labels[1])
 plt.imshow(sample)
-plt.show()
+plt.show() """
 
-model = tf.keras.models.Sequential([
+''' model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), input_shape=(
         96, 96, 3), activation='relu'),
     tf.keras.layers.MaxPooling2D((2, 2)),
@@ -96,9 +96,35 @@ model.compile(loss='categorical_crossentropy',
 history = model.fit(images, labels,
                     batch_size=64, epochs=5,
                     verbose=1)
+ '''
+
+cnn_model = Sequential()
+
+cnn_model.add(Conv2D(32, (3, 3), input_shape=(96, 96, 3), activation='relu'))
+cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+cnn_model.add(Dropout(0.25))
+
+cnn_model.add(Conv2D(64, (3, 3), input_shape=(28, 28, 3), activation='relu'))
+cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+cnn_model.add(Dropout(0.25))
+
+cnn_model.add(Conv2D(128, (3, 3), input_shape=(28, 28, 3), activation='relu'))
+cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+cnn_model.add(Dropout(0.25))
+
+cnn_model.add(Flatten())
+cnn_model.add(Dense(units=512, activation='relu'))
+cnn_model.add(Dropout(0.25))
+cnn_model.add(Dense(units=25, activation='softmax'))
+
+cnn_model.compile(loss='sparse_categorical_crossentropy',
+                  optimizer='adam', metrics=['accuracy'])
+
+history = cnn_model.fit(images, labels, batch_size=512, epochs=50,
+                        verbose=1)
 
 # saving the model
-model.save("model.h5")
+cnn_model.save("model1.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()

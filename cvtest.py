@@ -36,8 +36,12 @@ while True:
     prediction = np.argmax(res, axis=-1)
     # print(res)
 
+    char = prediction[0]+65
+    if char > 80:
+        char += 1
+
     cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2)
-    cv2.putText(frame, chr(prediction[0]+65), (600, 50), cv2.FONT_HERSHEY_SIMPLEX,
+    cv2.putText(frame, chr(char), (600, 50), cv2.FONT_HERSHEY_SIMPLEX,
                 1, (225, 0, 0), 2, cv2.LINE_AA)
 
     cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
