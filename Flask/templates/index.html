@@ -7,7 +7,21 @@
         .open-button {
             text-align: center;
             background-color: #FF6CAB;
-            text-decoration-color: black;
+            text-decoration: none;
+            /* width: 33%; */
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            margin: 20px;
+            border-radius: 10px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        
+        .open-button:hover {
+            background-color: #8A64EB;
         }
         
         .tab {
@@ -106,9 +120,10 @@
     <div id="Video" class="tabcontent" style="text-align:center">
         <h1>Video Streaming Demonstration </h1>
         <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
-        <textarea id='letter'></textarea>
-        <button onclick="test()">Click</button>
-
+        <div style="padding-top: 30px; display: flex; flex-direction: column; align-items: center;">
+            <textarea style="width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter'></textarea>
+            <button class="open-button" onclick="test()">Autocorrect</button>
+        </div>
     </div>
     <div id="Team" class="tabcontent">
         <div class="cards ">
@@ -180,15 +195,21 @@
             document.getElementById(cityName).style.display = "block ";
             // evt.currentTarget.className += " active ";
             document.getElementById(cityName).className += ' active '
-            console.log(document.getElementById(cityName))
+                // console.log(document.getElementById(cityName))
         }
 
         function test() {
             string = document.getElementById('letter').innerHTML;
+            // string = 'this is a tst'
+            var res = string.trim().split(" ");
+            var test = res.splice(-1);
+            // console.log(res, test);
             // console.log(fixTypos("hello  sadojoj         oajoj", "en-us"))
             // $Spelling.BinSpellCheck(input)
             var en = BJSpell("en_US");
-            string = en.suggest(string)[0]
+            test = en.suggest(test[0])[0]
+            res.push(test)
+            string = res.join(" ")
             console.log(string)
             document.getElementById('letter').innerHTML = string
         }
