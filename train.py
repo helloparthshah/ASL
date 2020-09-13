@@ -15,14 +15,34 @@ import os
 import random
 import cv2
 
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # Currently, memory growth needs to be the same across GPUs
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+    except RuntimeError as e:
+        # Memory growth must be set before GPUs have been initialized
+        print(e)
+
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
+
 
 def load_images(directory):
     images = []
     labels = []
+    outputs = 0
     uniq_labels = sorted(os.listdir(directory))
 
     for idx, label in enumerate(uniq_labels):
         print(label, " is ready to load")
+        outputs = outputs + 1
         for file in os.listdir(directory + "/" + label):
             filepath = directory + "/" + label + "/" + file
             image = cv2.resize(cv2.imread(filepath), (96, 96))
@@ -32,17 +52,18 @@ def load_images(directory):
     images = np.array(images)
     labels = np.array(labels)
 
+    # images, labels = unison_shuffled_copies(images, labels)
+
     # images = images.reshape((len(images), 96, 96, 1))
     print(images.shape)
     images = images.astype('float32')/255
     labels = keras.utils.to_categorical(labels)
-    return(images, labels)
+    return(images, labels, outputs)
 
 
-images, labels = load_images(directory="./data")
+images, labels, noutputs = load_images(directory="./data1")
 print("Data has been loaded")
 
-print(labels[1])
 """ c = list(zip(images, labels))
 
 random.shuffle(c)
@@ -53,12 +74,12 @@ x_train = images[0:500]
 y_train = labels[0:500]
 x_test = images[500:]
 y_test = labels[500:] """
-# sample = images[600]
-# print(sample.shape)
-# plt.imshow(sample)
-# plt.show()
+""" sample = images[1]
+print(sample.shape, labels[1])
+plt.imshow(sample)
+plt.show() """
 
-model = tf.keras.models.Sequential([
+''' model = tf.keras.models.Sequential([
     tf.keras.layers.Conv2D(32, (3, 3), input_shape=(
         96, 96, 3), activation='relu'),
     tf.keras.layers.MaxPooling2D((2, 2)),
@@ -66,7 +87,7 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(6, activation='softmax')
+    tf.keras.layers.Dense(noutputs, activation='softmax')
 ])
 
 model.compile(loss='categorical_crossentropy',
@@ -75,9 +96,35 @@ model.compile(loss='categorical_crossentropy',
 history = model.fit(images, labels,
                     batch_size=64, epochs=5,
                     verbose=1)
+ '''
+
+cnn_model = Sequential()
+
+cnn_model.add(Conv2D(32, (3, 3), input_shape=(96, 96, 3), activation='relu'))
+cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+cnn_model.add(Dropout(0.25))
+
+cnn_model.add(Conv2D(64, (3, 3), input_shape=(28, 28, 3), activation='relu'))
+cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+cnn_model.add(Dropout(0.25))
+
+cnn_model.add(Conv2D(128, (3, 3), input_shape=(28, 28, 3), activation='relu'))
+cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
+cnn_model.add(Dropout(0.25))
+
+cnn_model.add(Flatten())
+cnn_model.add(Dense(units=512, activation='relu'))
+cnn_model.add(Dropout(0.25))
+cnn_model.add(Dense(units=25, activation='softmax'))
+
+cnn_model.compile(loss='sparse_categorical_crossentropy',
+                  optimizer='adam', metrics=['accuracy'])
+
+history = cnn_model.fit(images, labels, batch_size=512, epochs=50,
+                        verbose=1)
 
 # saving the model
-model.save("test_model.h5")
+cnn_model.save("model1.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()
