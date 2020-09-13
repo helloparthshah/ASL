@@ -102,7 +102,7 @@
     <div id="Video" class="tabcontent" style="text-align:center">
         <h1>Video Streaming Demonstration </h1>
         <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
-        <p id='letter'></p>
+        <h1 id='letter'></h1>
 
     </div>
     <div id="Team " class="tabcontent ">
@@ -143,6 +143,18 @@
             </div>
         </div>
     </div>
+    <script>
+        var letter = document.getElementById("letter");
+
+        setInterval(() => {
+            fetch("/letter")
+                .then(response => {
+                    response.text().then(t => {
+                        letter.innerHTML += t
+                    })
+                });
+        }, 5000);
+    </script>
     <script>
         openTab(event, 'About');
 

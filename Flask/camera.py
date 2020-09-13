@@ -44,6 +44,9 @@ class VideoCamera(object):
         res = model.predict(gray.reshape(1, 96, 96, 3))
 
         prediction = np.argmax(res, axis=-1)
+        # print(res[0][prediction[0]]*100)
+        cv2.putText(frame, str(res[0][prediction[0]]*100), (550, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (225, 0, 0), 2, cv2.LINE_AA)
         # print(res)
 
         char = prediction[0]+65
