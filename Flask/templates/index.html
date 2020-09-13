@@ -72,6 +72,10 @@
             transition: 1s;
         }
     </style>
+    <!-- <script type='text/javascript' src='/JavaScriptSpellCheck/include.js'></script> -->
+    <script type="text/javascript" src="{{url_for('static', filename='BJSpell.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='en_US.js')}}"></script>
+
 </head>
 
 <body style="background-image:linear-gradient(to bottom right, #64E8DE, #8A64EB)">
@@ -102,7 +106,8 @@
     <div id="Video" class="tabcontent" style="text-align:center">
         <h1>Video Streaming Demonstration </h1>
         <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
-        <h1 id='letter'></h1>
+        <textarea id='letter'></textarea>
+        <button onclick="test()">Click</button>
 
     </div>
     <div id="Team" class="tabcontent">
@@ -130,7 +135,7 @@
                     <h1>Keshav Agrawal</h1>
                     <p style='font-family:Roboto; font-size:18px;'>kvagrawal@ucdavis.edu</p>
                     <p style='font-family:Roboto; font-size:18px;'> <i>Undergraduate at UC Davis<br>
-                        Major in Computer Science</i></p>
+                            Major in Computer Science</i></p>
                 </div>
             </div>
             <div style="text-align:center ">
@@ -170,6 +175,16 @@
             }
             document.getElementById(cityName).style.display = "block ";
             evt.currentTarget.className += " active ";
+        }
+
+        function test() {
+            string = document.getElementById('letter').innerHTML;
+            // console.log(fixTypos("hello  sadojoj         oajoj", "en-us"))
+            // $Spelling.BinSpellCheck(input)
+            var en = BJSpell("en_US");
+            string = en.suggest(string)[0]
+            console.log(string)
+            document.getElementById('letter').innerHTML = string
         }
     </script>
 </body>

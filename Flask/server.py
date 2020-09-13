@@ -36,7 +36,7 @@ def video_feed():
 
 
 @app.route('/letter')
-def letter():
+def letter_send():
     global letter
     return letter
 
