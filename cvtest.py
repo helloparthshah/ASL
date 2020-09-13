@@ -16,7 +16,7 @@ if gpus:
         # Memory growth must be set before GPUs have been initialized
         print(e)
 
-model = load_model("model.h5")
+model = load_model("model1.h5")
 
 camera = cv2.VideoCapture(0)
 
