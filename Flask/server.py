@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response
 from camera import VideoCamera
+import cv2
 
 ''' gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
@@ -32,6 +33,7 @@ def gen(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+             
 @app.route('/vid')
 def video_feed():
     return Response(gen(VideoCamera()),
