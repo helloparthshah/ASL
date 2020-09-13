@@ -15,7 +15,7 @@ if gpus:
         # Memory growth must be set before GPUs have been initialized
         print(e)
 
-model = load_model("../model.h5")
+model = load_model("../model1.h5")
 
 
 class VideoCamera(object):
@@ -40,13 +40,17 @@ class VideoCamera(object):
 
         gray = cv2.resize(gray, (96, 96))
 
-        res=model.predict(gray.reshape(1, 96, 96, 3))
-        
+        res = model.predict(gray.reshape(1, 96, 96, 3))
+
         prediction = np.argmax(res, axis=-1)
         # print(res)
 
+        char = prediction[0]+65
+        if char > 80:
+            char += 1
+
         cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2)
-        cv2.putText(frame, chr(prediction[0]+65), (600, 50), cv2.FONT_HERSHEY_SIMPLEX,
+        cv2.putText(frame, chr(char), (600, 50), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (225, 0, 0), 2, cv2.LINE_AA)
 
         ret, jpeg = cv2.imencode('.jpg', frame)

@@ -52,11 +52,11 @@ def load_images(directory):
     images = np.array(images)
     labels = np.array(labels)
 
-    # images, labels = unison_shuffled_copies(images, labels)
+    images, labels = unison_shuffled_copies(images, labels)
 
     # images = images.reshape((len(images), 96, 96, 1))
     print(images.shape)
-    images = images.astype('float32')/255
+    images = images.astype('float32')/255.0
     labels = keras.utils.to_categorical(labels)
     return(images, labels, outputs)
 
@@ -98,33 +98,30 @@ history = model.fit(images, labels,
                     verbose=1)
  '''
 
-cnn_model = Sequential()
+model = Sequential()
+model.add(Conv2D(filters=64, kernel_size=5, padding='same', activation='relu',
+                 input_shape=(96, 96, 3)))
+model.add(Conv2D(filters=64, kernel_size=5, padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(4, 4)))
+model.add(Dropout(0.5))
+model.add(Conv2D(filters=128, kernel_size=5,
+                 padding='same', activation='relu'))
+model.add(Conv2D(filters=128, kernel_size=5,
+                 padding='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(4, 4)))
+model.add(Dropout(0.5))
+model.add(Conv2D(filters=256, kernel_size=5,
+                 padding='same', activation='relu'))
+model.add(Dropout(0.5))
+model.add(Flatten())
+model.add(Dense(noutputs, activation='softmax'))
 
-cnn_model.add(Conv2D(32, (3, 3), input_shape=(96, 96, 3), activation='relu'))
-cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
-cnn_model.add(Dropout(0.25))
+model.compile(optimizer='rmsprop',
+              loss='categorical_crossentropy', metrics=['accuracy'])
 
-cnn_model.add(Conv2D(64, (3, 3), input_shape=(28, 28, 3), activation='relu'))
-cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
-cnn_model.add(Dropout(0.25))
-
-cnn_model.add(Conv2D(128, (3, 3), input_shape=(28, 28, 3), activation='relu'))
-cnn_model.add(MaxPooling2D(pool_size=(2, 2)))
-cnn_model.add(Dropout(0.25))
-
-cnn_model.add(Flatten())
-cnn_model.add(Dense(units=512, activation='relu'))
-cnn_model.add(Dropout(0.25))
-cnn_model.add(Dense(units=25, activation='softmax'))
-
-cnn_model.compile(loss='sparse_categorical_crossentropy',
-                  optimizer='adam', metrics=['accuracy'])
-
-history = cnn_model.fit(images, labels, batch_size=512, epochs=50,
-                        verbose=1)
-
+hist = model.fit(images, labels, epochs=5, batch_size=64)
 # saving the model
-cnn_model.save("model1.h5")
+model.save("model1.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()
