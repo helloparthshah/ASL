@@ -22,6 +22,7 @@ class VideoCamera(object):
     def __init__(self):
         # capturing video
         self.video = cv2.VideoCapture(0)
+        self.letter = ''
 
     def __del__(self):
         # releasing camera
@@ -49,9 +50,11 @@ class VideoCamera(object):
         if char > 80:
             char += 1
 
+        self.letter = chr(char)
+
         cv2.rectangle(frame, (0, 0), (250, 250), (0, 255, 0), 2)
         cv2.putText(frame, chr(char), (600, 50), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (225, 0, 0), 2, cv2.LINE_AA)
 
         ret, jpeg = cv2.imencode('.jpg', frame)
-        return jpeg.tobytes(), chr(char)
+        return jpeg.tobytes()
