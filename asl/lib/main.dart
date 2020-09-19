@@ -42,14 +42,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _initializeCamera() async {
     String res = await Tflite.loadModel(
-      model: "assets/t1.tflite",
-      labels: "assets/l.txt",
+      model: "assets/m1.tflite",
+      labels: "assets/label.txt",
       useGpuDelegate: true,
     );
     print(res);
 
     List<CameraDescription> cameras = await availableCameras();
-    controller = CameraController(cameras[1], ResolutionPreset.ultraHigh);
+    controller = CameraController(cameras[1], ResolutionPreset.medium);
 
     controller.initialize().then((_) {
       if (!mounted) {
@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {});
       controller.startImageStream(_scan);
     });
+    // controller.stopImageStream();
   }
 
   _scan(CameraImage img) async {
