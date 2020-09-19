@@ -16,7 +16,7 @@ if gpus:
         # Memory growth must be set before GPUs have been initialized
         print(e)
 
-model = load_model("model.h5")
+model = load_model("test1.h5")
 
 camera = cv2.VideoCapture(0)
 
@@ -27,9 +27,9 @@ while True:
     roi = frame[0:250, 0:250]
 
     # gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(roi, (7, 7), 0)
+    # gray = cv2.GaussianBlur(roi, (7, 7), 0)
 
-    gray = cv2.resize(gray, (96, 96))
+    gray = cv2.resize(roi, (96, 96))
 
     res = model.predict(gray.reshape(1, 96, 96, 3))
 

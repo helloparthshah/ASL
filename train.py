@@ -45,6 +45,8 @@ def load_images(directory):
         outputs = outputs + 1
         for file in os.listdir(directory + "/" + label):
             filepath = directory + "/" + label + "/" + file
+            # x=random.randint(96,2000);
+            # y=random.randint(96,2000);
             image = cv2.resize(cv2.imread(filepath), (96, 96))
             # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             images.append(image)
@@ -99,8 +101,7 @@ history = model.fit(images, labels,
  '''
 
 model = Sequential()
-model.add(Conv2D(filters=64, kernel_size=5, padding='same', activation='relu',
-                 input_shape=(96, 96, 3)))
+model.add(Conv2D(filters=64, kernel_size=5, padding='same', activation='relu'))
 model.add(Conv2D(filters=64, kernel_size=5, padding='same', activation='relu'))
 model.add(MaxPooling2D(pool_size=(4, 4)))
 model.add(Dropout(0.5))
@@ -121,7 +122,7 @@ model.compile(optimizer='rmsprop',
 
 hist = model.fit(images, labels, epochs=5, batch_size=64)
 # saving the model
-model.save("model.h5")
+model.save("test1.h5")
 
 """ plt.imshow(x_test[20])
 plt.show()
