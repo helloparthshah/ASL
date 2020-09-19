@@ -27,7 +27,8 @@ def getacc(s):
     preds = autocomplete.split_predict(s)
     print(preds)
     if(len(preds) == 0):
-        return s.trim().split(" ").splice(-1)
+        #return s.trim().split(" ").splice(-1)
+        return s.strip()
     return preds[0][0]
 
 
