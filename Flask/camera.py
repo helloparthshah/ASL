@@ -15,7 +15,8 @@ if gpus:
         # Memory growth must be set before GPUs have been initialized
         print(e)
 
-model = load_model("../model.h5")
+# model = load_model("../model.h5")
+model = load_model("../converted_keras/keras_model.h5")
 
 
 class VideoCamera(object):
@@ -23,6 +24,10 @@ class VideoCamera(object):
         # capturing video
         self.video = cv2.VideoCapture(0)
         self.letter = ''
+        f = open("../converted_keras/l.txt", "r")
+        self.labels = f.read().splitlines()
+        f.close()
+        self.data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
     def __del__(self):
         # releasing camera
@@ -30,14 +35,22 @@ class VideoCamera(object):
 
     def get_frame(self):
         # extracting frames
-        ret, frame = self.video.read()
+        (ret, frame) = self.video.read()
 
         frame = cv2.flip(frame, 1)
 
         roi = frame[0:250, 0:250]
 
-        # gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(roi, (7, 7), 0)
+        gray = cv2.resize(roi, (224, 224))
+        normalized_image_array = (gray.astype(np.float32) / 127.0) - 1
+
+        self.data[0] = normalized_image_array
+
+        res = model.predict(self.data)
+        p = np.argmax(res, axis=-1)
+
+        char = self.labels[p[0]]
+        ''' gray = cv2.GaussianBlur(roi, (7, 7), 0)
 
         gray = cv2.resize(gray, (96, 96))
 
@@ -45,8 +58,6 @@ class VideoCamera(object):
 
         prediction = np.argmax(res, axis=-1)
         # print(res[0][prediction[0]]*100)
-        ''' cv2.putText(frame, str(res[0][prediction[0]]*100), (550, 100), cv2.FONT_HERSHEY_SIMPLEX,
-                    1, (225, 0, 0), 2, cv2.LINE_AA) '''
         # print(res)
 
         char = prediction[0]+65
@@ -57,7 +68,7 @@ class VideoCamera(object):
         if char == 64:
             char = 'Space'
         else:
-            char = chr(char)
+            char = chr(char) '''
 
         self.letter = char
 

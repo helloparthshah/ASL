@@ -93,7 +93,7 @@
 
 </head>
 
-<body style="background-image:linear-gradient(to bottom right, #64E8DE, #8A64EB)">
+<body onload="document.getElementById('letter').focus();" style="background-image:linear-gradient(to bottom right, #64E8DE, #8A64EB)">
 
     <section id="nbr" style="display:show;text-align:justify" class="navbar">
 
@@ -122,7 +122,7 @@
         <!-- <h1>Video Streaming Demonstration </h1> -->
         <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
         <div style="padding-top: 30px; display: flex; flex-direction: column; align-items: center;">
-            <textarea style="transition: 0.3s; width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter'></textarea>
+            <textarea style="transition: 0.3s; width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter' autofocus readonly></textarea>
             <div>
                 <button class="open-button" onclick="test()">Autocorrect</button>
                 <button class="open-button" onclick="clr()">Clear</button>
@@ -228,17 +228,34 @@
         function test() {
             string = document.getElementById('letter').innerHTML;
             // string = 'this is a tst'
-            var res = string.trim().split(" ");
-            var test = res.splice(-1);
-            // console.log(res, test);
-            // console.log(fixTypos("hello  sadojoj         oajoj", "en-us"))
-            // $Spelling.BinSpellCheck(input)
-            var en = BJSpell("en_US");
-            test = en.suggest(test[0])[0]
-            res.push(test)
-            string = res.join(" ")
+            // var res = string.trim().split(" ");
+            // var s = res.splice(-2);
+            string += ' ';
             console.log(string)
-            document.getElementById('letter').innerHTML = string
+            fetch("/autocomplete", {
+                    credentials: "include",
+                    method: 'POST',
+                    body: JSON.stringify({
+                        s: string
+                    }),
+                    cache: "no-cache",
+                    headers: new Headers({
+                        "content-type": "application/json"
+                    })
+                })
+                .then(response => {
+                    response.text().then(t => {
+                        if (response) {
+                            var res = string.trim().split(" ");
+                            res.splice(-1)
+                            res.push(t)
+                            string = res.join(" ")
+                            string += ' '
+                            console.log(string);
+                            document.getElementById('letter').innerHTML = string
+                        }
+                    })
+                });
         }
     </script>
 </body>

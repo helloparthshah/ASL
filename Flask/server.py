@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response, request
 from camera import VideoCamera
+import autocomplete
 import cv2
 
 # initialize a flask object
@@ -9,6 +10,22 @@ app = Flask(__name__)
 thread = None
 
 letter = ''
+
+autocomplete.load()
+
+
+def getacc(s):
+    print(s)
+
+    preds = autocomplete.split_predict(s)
+    print(preds)
+    if(len(preds) == 0):
+        return s
+    return preds[0][0]
+
+
+def getpred(s1, s2):
+    return autocomplete.predict(s1, s2)
 
 
 @app.route("/")
@@ -21,6 +38,7 @@ def gen(camera):
         # get camera frame
         frame = camera.get_frame()
 
+        # getting the letter
         global letter
         if letter != camera.letter:
             letter = camera.letter
@@ -39,6 +57,14 @@ def video_feed():
 def letter_send():
     global letter
     return letter
+
+
+@app.route('/autocomplete', methods=['POST'])
+def ac():
+    req = request.get_json()
+    print(req)
+    s = req['s']
+    return getacc(s)
 
 
 if __name__ == '__main__':
