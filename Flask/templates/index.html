@@ -6,51 +6,62 @@
     <style>
         .open-button {
             text-align: center;
-            background-color: #FF6CAB;
+            /*background-color: #FF6CAB;*/
             text-decoration: none;
             /* width: 33%; */
-            float: left;
-            border: none;
+            /*float: left;*/
             outline: none;
             cursor: pointer;
-            padding: 14px 16px;
-            margin: 20px;
-            width: 150px;
-            border-radius: 10px;
-            transition: 0.3s;
+            margin: 15px;
+            width: 165px; 
+            color: #551A8B !important;
             font-size: 17px;
+			text-transform: uppercase;
+			background: #ffffff;
+            padding: 14px 16px;
+			border: 4px solid #551A8B !important;
+			border-radius: 6px;
+			display: inline-block;
+			transition: all 0.3s ease 0s;
         }
         
         .open-button:hover {
-            background-color: #8A64EB;
-        }
+			color: #494949 !important;
+			border-radius: 50px;
+			border-color: #B19CD9 !important;
+			transition: all 0.3s ease 0s;        }
         
         .tab {
             overflow: hidden;
-            background: #c7ceea;
+            background: transparent;
             margin: 0px;
             text-align: center;
         }
         
         .tab button {
-            background-color: inherit;
+        
             width: 33%;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            transition: 0.3s;
+            color: #551A8B !important;
             font-size: 17px;
+			text-transform: uppercase;
+			background: #ffffff;
+            padding: 14px 16px;
+			border: 4px solid #551A8B !important;
+			border-radius: 6px;
+			display: inline-block;
+			transition: all 0.3s ease 0s;
         }
         
         .tab button:hover {
-            background-color: rgb(47, 234, 255);
+            color: #494949 !important;
+			border-radius: 50px;
+			border-color: #B19CD9 !important;
+			transition: all 0.3s ease 0s;
         }
         /* Create an active/current tablink class */
         
         .tab button.active {
-            background-color: rgb(47, 234, 255);
+            background-color: #000000;
         }
         /* Style the tab content */
         
@@ -60,11 +71,10 @@
         }
         
         .card {
-            max-width: 320px;
-            width: 100%;
+            max-width: 300px;
             height: 13em;
-            margin: 20px;
-            padding: 5px;
+            margin: 18px;
+            padding: 10px;
             background: #c7ceea;
             border: 1px solid #CCCCCC;
             box-sizing: border-box;
@@ -115,18 +125,20 @@
         </p>
     </div>
     <div id="Video" class="tabcontent" style="text-align:center">
-        <!-- <h1>Video Streaming Demonstration </h1> -->
-        <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
+        <h1></h1>
+        <img id="bg" src="{{ url_for('video_feed') }}" width="50%" style = " border: 3px solid #551A8B;">
         <div style="padding-top: 30px; display: flex; flex-direction: column; align-items: center;">
-            <textarea style="transition: 0.3s; width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter' autofocus readonly></textarea>
-            <button class="open-button" onclick="location.href='/learn'">Learn</button>
-            <div>
-                <button class="open-button" onclick="test()">Autocorrect</button>
-                <button class="open-button" onclick="clr()">Clear</button>
-            </div>
+            <textarea style="transition: 0.3s; width: 500px; height: 100px; border-radius: 10px; border: none; font-family:Roboto; border: 3px solid #551A8B;font-size: 20px; " id='letter' autofocus readonly></textarea>
+            <p></p>
             <div>
                 <button class="open-button" onclick="play()">Play</button>
                 <button class="open-button" onclick="pause()">Pause</button>
+                <button class="open-button" onclick="clr()">Clear</button>
+            </div>
+               
+            <div>
+                <button class="open-button" onclick="test()">Autocorrect</button>
+                <button class="open-button" onclick="location.href='/learn'">Learn</button>
             </div>
         </div>
     </div>
@@ -196,7 +208,7 @@
 
         function pause() {
             flag = false
-            document.getElementById('letter').style.backgroundColor = 'red'
+            document.getElementById('letter').style.backgroundColor = '#BFE6FF'
         }
     </script>
     <script>
