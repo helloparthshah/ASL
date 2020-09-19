@@ -23,8 +23,8 @@ if gpus:
         # Memory growth must be set before GPUs have been initialized
         print(e)
 
-model = load_model("./converted_keras/keras_model.h5")
-
+model = load_model("./converted_keras/t.h5")
+print(model.summary())
 camera = cv2.VideoCapture(0)
 
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)

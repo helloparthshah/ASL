@@ -16,7 +16,8 @@ if gpus:
         print(e)
 
 # model = load_model("../model.h5")
-model = load_model("../converted_keras/keras_model.h5")
+# model = load_model("../converted_keras/keras_model.h5")
+model = load_model("../converted_keras/t.h5")
 
 
 class VideoCamera(object):
