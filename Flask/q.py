@@ -7,4 +7,4 @@ def getpred(s):
 
 autocomplete.load()
 
-print(getpred('The ap'))
+print(getpred('I am a huge '))
