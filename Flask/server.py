@@ -3,7 +3,8 @@
 from flask import Flask, render_template, Response, request
 from camera import VideoCamera
 import autocomplete
-import cv2
+# import cv2
+import random
 
 # initialize a flask object
 app = Flask(__name__)
@@ -12,6 +13,10 @@ app = Flask(__name__)
 thread = None
 
 letter = ''
+
+f = open("../converted_keras/l.txt", "r")
+labels = f.read().splitlines()
+f.close()
 
 autocomplete.load()
 
@@ -33,6 +38,11 @@ def getpred(s1, s2):
 @app.route("/")
 def index():
     return render_template("index.html", letter=letter)
+
+
+@app.route("/learn")
+def learn():
+    return render_template("learn.html")
 
 
 def gen(camera):
@@ -59,6 +69,11 @@ def video_feed():
 def letter_send():
     global letter
     return letter
+
+
+@app.route('/getrand')
+def send_rand():
+    return random.choice(labels)
 
 
 @app.route('/autocomplete', methods=['POST'])

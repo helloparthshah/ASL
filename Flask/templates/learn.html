@@ -1,0 +1,142 @@
+<html>
+
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <title>Video Streaming Demonstration</title>
+    <style>
+        .open-button {
+            text-align: center;
+            background-color: #FF6CAB;
+            text-decoration: none;
+            /* width: 33%; */
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            margin: 20px;
+            width: 150px;
+            border-radius: 10px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        
+        .open-button:hover {
+            background-color: #8A64EB;
+        }
+        
+        .tab {
+            overflow: hidden;
+            background: #c7ceea;
+            margin: 0px;
+            text-align: center;
+        }
+        
+        .tab button {
+            background-color: inherit;
+            width: 100%;
+            /* float: left; */
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        
+        .tab button:hover {
+            background-color: rgb(47, 234, 255);
+        }
+        /* Create an active/current tablink class */
+        
+        .tab button.active {
+            background-color: rgb(47, 234, 255);
+        }
+        /* Style the tab content */
+    </style>
+
+</head>
+
+<body style="background-image:linear-gradient(to bottom right, #64E8DE, #8A64EB)">
+    <section id="nbr" style="display:show;text-align:justify" class="navbar">
+
+        <div class="tab" width=100%>
+            <button class="tablinks" onclick="location.href='/'">Back</button>
+        </div>
+
+    </section>
+
+    <div id="Video" class="tabcontent" style="text-align:center">
+        <!-- <h1>Video Streaming Demonstration </h1> -->
+        <img id="bg" src="/vid" width="50%">
+        <div style="padding-top: 30px; display: flex; flex-direction: column; align-items: center;">
+            <div style="transition: 0.3s; width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter'>
+                <h1 style="transition: 0.3s;" id='curr'></h1>
+            </div>
+            <div>
+                <button class="open-button" onclick="getrand()">Get New</button>
+            </div>
+            <div>
+                <button class="open-button" onclick="play()">Play</button>
+                <button class="open-button" onclick="pause()">Pause</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        var letter = document.getElementById("curr");
+        var flag = false
+        var current = '';
+        getrand();
+        pause();
+
+        setInterval(() => {
+            fetch("/letter")
+                .then(response => {
+                    response.text().then(t => {
+                        if (flag == true) {
+
+                            if (t == 'Space') {
+                                t = ' '
+                            }
+                            if (t == current) {
+                                correct();
+                            }
+                            // letter.innerHTML += t
+                        }
+                    })
+                });
+        }, 2000);
+
+        async function correct() {
+            letter.style.color = 'green';
+            setTimeout(function() {
+                letter.style.color = 'black';
+                getrand();
+            }, 500);
+        }
+
+        function getrand() {
+            fetch("/getrand")
+                .then(response => {
+                    response.text().then(t => {
+                        document.getElementById('curr').innerHTML = t;
+                        console.log(t)
+                        current = t;
+                    })
+                });
+        }
+
+        function play() {
+            document.getElementById('letter').style.backgroundColor = 'white'
+            flag = true
+        }
+
+        function pause() {
+            flag = false
+            document.getElementById('letter').style.backgroundColor = 'red'
+        }
+    </script>
+</body>
+
+
+</html>

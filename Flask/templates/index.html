@@ -87,22 +87,18 @@
             transition: 1s;
         }
     </style>
-    <!-- <script type='text/javascript' src='/JavaScriptSpellCheck/include.js'></script> -->
-    <script type="text/javascript" src="{{url_for('static', filename='BJSpell.js')}}"></script>
-    <script type="text/javascript" src="{{url_for('static', filename='en_US.js')}}"></script>
 
 </head>
 
-<body onload="document.getElementById('letter').focus();" style="background-image:linear-gradient(to bottom right, #64E8DE, #8A64EB)">
+<body style="background-image:linear-gradient(to bottom right, #64E8DE, #8A64EB)">
 
     <section id="nbr" style="display:show;text-align:justify" class="navbar">
 
-        <div class="tab" width=1 00%>
+        <div class="tab" width=100%>
             <button class="tablinks" onclick="openTab(event, 'About')">About</button>
             <button class="tablinks" onclick="openTab(event, 'Video')">Video</button>
             <button class="tablinks" onclick="openTab(event, 'Team')">Team</button>
         </div>
-
     </section>
 
     <div id="About" class="tabcontent" style="text-align:center">
@@ -123,6 +119,7 @@
         <img id="bg" src="{{ url_for('video_feed') }}" width="50%">
         <div style="padding-top: 30px; display: flex; flex-direction: column; align-items: center;">
             <textarea style="transition: 0.3s; width: 500px; height: 100px; border-radius: 10px; border: none;" id='letter' autofocus readonly></textarea>
+            <button class="open-button" onclick="location.href='/learn'">Learn</button>
             <div>
                 <button class="open-button" onclick="test()">Autocorrect</button>
                 <button class="open-button" onclick="clr()">Clear</button>
